@@ -1,0 +1,80 @@
+-----*/Escribir las siguientes sentencias SQL
+
+---1Crear una tabla llamada personal con los campos clave_personal, nombre, paterno, materno, rfc, fechanacimiento, email
+
+CREATE TABLE personal (
+    clave_personal NUMBER(10) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    ap_paterno VARCHAR(50) NOT NULL,
+    ap_materno VARCHAR(50) NULL,
+    rfc VARCHAR(13) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    email VARCHAR(50) NOT NULL
+);
+desc personal;
+
+select * from personal;
+
+---2Crear una tabla llamada prestamo con los campos no_prestamo, clave_personal, fecha, monto, tipo
+---3Prestamo debe tener un CONSTRAINT de FOREIGN KEY en DELETE CASCADE para clave_personal
+
+CREATE TABLE prestamo (
+    no_prestamo INT PRIMARY KEY,
+    clave_personal INT,
+    fecha DATE,
+    monto DECIMAL(10, 2),
+    tipo VARCHAR(50),
+    FOREIGN KEY (clave_personal) REFERENCES personal(clave_personal) ON DELETE CASCADE
+);
+
+---4Insertar 3 registros en la tabla personal y 2 registros por cada persona en prestamo
+
+CREATE SEQUENCE INCREMENTO_ID_PERSONAL
+INCREMENT BY 1
+START WITH 1;
+
+SELECT * FROM USER_SEQUENCES;
+
+SELECT INCREMENTO_ID_PERSONAL.nextval FROM DUAL;
+
+insert into personal values (INCREMENTO_ID_PERSONAL.nextval, 'ISMAEL', 'LÓPEZ', 'TORRES', 'LOTI000725MGR','07-25-2000','ISMALOTO@GMAIL.COM');
+insert into personal values (INCREMENTO_ID_PERSONAL.nextval, 'KARLA IVONNE', 'FLORES', 'CISNEROS', 'FOCK960120910','01-20-1996','KIVFLOREZ@GMAIL.COM');
+insert into personal values (INCREMENTO_ID_PERSONAL.nextval, 'OSCAR', 'MARTÍNEZ', 'GUZMÁN', 'MAGO011206789','06-12-2001','GUZMANOS@OUTLOOK.COM');
+insert into personal values (INCREMENTO_ID_PERSONAL.nextval, 'MARÍA', 'NORIEGA', 'SANCHEZ', 'NOSA992204U51','04-22-1999',' ');
+
+select * from personal;
+CREATE SEQUENCE INCREMENTO_ID_PRESTAMO
+INCREMENT BY 1
+START WITH 1
+NOCACHE;
+
+SELECT INCREMENTO_ID_PRESTAMO.nextval FROM DUAL;
+insert into prestamo values (INCREMENTO_ID_PRESTAMO.nextval, 7, '11-05-2023', 6, 'A');
+insert into prestamo values (INCREMENTO_ID_PRESTAMO.nextval, 7, '03-25-2022', 22, 'C');
+insert into prestamo values (INCREMENTO_ID_PRESTAMO.nextval, 11, '10-27-2023', 13, 'B');
+insert into prestamo values (INCREMENTO_ID_PRESTAMO.nextval, 11, '12-23-2022', 2, 'C');
+insert into prestamo values (INCREMENTO_ID_PRESTAMO.nextval, 10, '08-31-2022', 13, 'A');
+insert into prestamo values (INCREMENTO_ID_PRESTAMO.nextval, 10, '11-01-2023', 9, 'B');
+
+select * from prestamo;
+select * from personal;
+
+---5 Eliminar 1 registro de personal y validar el CONSTRAINT de DELETE
+delete from personal where clave_personal = 11;
+delete from prestamo where no_prestamo = 12;
+
+
+---6LIstar el total de prestamo por personal
+SELECT p.clave_personal, p.nombre, COUNT(*) AS total_prestamos FROM personal p LEFT JOIN prestamo pr ON p.clave_personal = pr.clave_personal GROUP BY p.clave_personal, p.nombre;
+
+---7Listar el personal que no tiene ningun prestamo
+SELECT p.clave_personal, p.nombre FROM personal p LEFT JOIN prestamo pr ON p.clave_personal = pr.clave_personal WHERE pr.no_prestamo IS NULL;
+
+---8Listar el total de personas por año de nacimiento, basado en el campo fechanaminento
+SELECT EXTRACT(YEAR FROM fecha_nacimiento) AS anio_nacimiento,COUNT(*) AS total_personas FROM personal GROUP BY EXTRACT(YEAR FROM fecha_nacimiento) ORDER BY anio_nacimiento;
+
+---9Listar las personas que no tengan un email valido
+SELECT clave_personal, nombre, email FROM personal WHERE email NOT LIKE '%@%';
+
+---10Vaciar la tabla de personal
+DELETE FROM personal;
