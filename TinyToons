@@ -1,0 +1,308 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 21 15:42:21 2023
+
+@author: Karla Ivonne
+"""
+
+class Cotizador:
+    def __init__(self):
+        self.rutas = {
+            "mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783},
+            "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583},
+            "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323},
+            "aca": {"mex": 783, "cva": 583, "igu": 323, "aca": 0}
+        }
+        self.tipocamion = {"platino": 2, "turista": 1.5, "básico": 1}
+        self.n_pasajeros = 1
+        self.multiplicador = 1
+        self.precio_ruta = 0
+        self.iva = 1.16
+
+    def elegirRuta(self, origen, destino):
+        if origen in self.rutas and destino in self.rutas[origen]:
+            self.precio_ruta = self.rutas[origen][destino]
+        else:
+            print("Ruta no válida")
+
+    def elegirTipoCamion(self, tipocamion):
+        if tipocamion in self.tipocamion:
+            self.multiplicador = self.tipocamion[tipocamion]
+        else:
+            print("Elige un tipo de camión válido")
+
+    def elegirN_pasajeros(self, n_pasajeros):
+        if isinstance(n_pasajeros, int) and n_pasajeros >= 1:
+            self.n_pasajeros = n_pasajeros
+        else:
+            print("El número de pasajeros debe ser un entero mayor o igual a 1")
+
+    def comprarViaje(self, origen, destino, n_pasajeros, tipocamion):
+        self.elegirRuta(origen, destino)
+        self.elegirTipoCamion(tipocamion)
+        self.elegirN_pasajeros(n_pasajeros)
+        costo = self.n_pasajeros * self.multiplicador * self.precio_ruta * self.iva
+        print("El precio total es de: " + str(costo) + " ¡Que tenga un excelente viaje!")
+        return costo
+
+class CapturaCotizador:
+    def __init__(self):
+        self.cotizador = Cotizador()
+    def comprarViaje(self):
+        origen = input("Bienvenid@ a Agencia Tiny Toons. Por favor indique Origen: ")
+        destino = input("Destino: ")
+        tipo_camion = input("Elige el tipo de camión (platino/turista/básico): ")
+        num_pasajeros = int(input("¿Cuántos boletos?: "))
+
+        self.cotizador.comprarViaje(origen, destino, num_pasajeros, tipo_camion)
+
+objnvo = CapturaCotizador()
+objnvo.comprarViaje()
+
+
+# =============================================================================
+# class Cotizador:
+#     rutas = {
+#         "mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783},
+#         "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583},
+#         "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323},
+#         "aca": {"mex": 783, "cva": 583, "igu": 323, "aca": 0}
+#     }
+# 
+#     tipocamion = {"platino": 2, "turista": 1.5, "base": 1}
+#     n_pasajeros = 1
+#     multiplicador = 1
+#     precio_ruta = 0
+#     iva = 1.16
+# 
+#     def elegirRuta(self, origen, destino):
+#         if origen in self.rutas and destino in self.rutas[origen]:
+#             self.precio_ruta = self.rutas[origen][destino]
+#         else:
+#             print("Ruta no válida") 
+# 
+#     def elegirTipoCamion(self, tipocamion):
+#         if tipocamion in ["platino", "turista", "base"]:
+#             self.multiplicador = self.tipocamion[tipocamion]
+#         else:
+#             print("Elige un tipo de camión válido")
+# 
+#     def elegirN_pasajeros(self, n_pasajeros):
+#         if isinstance(n_pasajeros, int) and n_pasajeros >= 1:
+#             self.n_pasajeros = n_pasajeros
+#         else:
+#             print("El número de pasajeros debe ser un entero mayor o igual a 1")
+# 
+#     def comprarViaje(self, origen, destino, n_pasajeros, tipocamion):
+#         self.elegirRuta(origen, destino)
+#         self.elegirTipoCamion(tipocamion)
+#         self.elegirN_pasajeros(n_pasajeros)
+#         costo = self.n_pasajeros * self.multiplicador * self.precio_ruta * self.iva
+#         print("El precio total es de: " + str(costo))
+#         return costo
+#     
+# class CapturaCotizador:
+#     
+#     rutas = {
+#         "mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783},
+#         "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583},
+#         "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323},
+#         "aca": {"mex": 783, "cva": 583, "igu": 323, "aca": 0}
+#     }
+# 
+#     tipocamion = {"platino": 2, "turista": 1.5, "base": 1}
+#     n_pasajeros = 1
+#     multiplicador = 1
+#     precio_ruta = 0
+#     iva = 1.16
+# 
+#     def __init__(self):
+#         self.rutas=self.capturarRutas()
+#         self.tipocamion=self.capturarTipocamion()
+#         self.n_passajeros=self.capturarN_pasajeros()
+#         self.precio_ruta=self.calcularPrecio_ruta()
+#     def capturarRutas(self):
+#         origen = input("Origen: ")
+#         return origen
+#         destino = input("Destino: ")
+#         return destino
+#     def capturarTipocamion(self):
+#         tipo_camion = input("Elige el tipo de camión (platino/turista/base): ")
+#         return tipo_camion
+#     def capturaN_pasajeros(self):
+#         n_pasajeros = int(input("¿Cuántos boletos?: "))
+#         return n_pasajeros
+#     def calcularPrecio_ruta(self):
+#         objCotizador=Cotizador(self.rutas,self.tipocamion,self.n_passajeros,self.precio_ruta)
+#         objCotizador=calcularPrecio_ruta()
+#         
+# objnvo=CapturaCotizador()
+# objnvo.calcularPrecio_ruta()        
+# =============================================================================
+        
+#cotizador = CotizadorViajes()
+#cotizador.comprarViaje(origen, destino, num_pasajeros, tipo_camion)
+
+
+
+# =============================================================================
+# class CotizadorViajes:
+#     rutas = {
+#         "mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783},
+#         "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583},
+#         "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323},
+#         "aca": {"mex": 783, "cva": 583, "igu": 323, "aca": 0}
+#     }
+# 
+#     tipocamion = {"platino": 2, "turista": 1.5, "base": 1}
+#     n_pasajeros = 1
+#     multiplicador = 1
+#     precio_ruta = 0
+#     iva = 1.16
+# 
+# cotizador = CotizadorViajes()
+# origen = input("Origen: ")
+# destino = input("Destino: ")
+# tipo_camion = input("Elige el tipo de camión (platino/turista/base): ")
+# num_pasajeros = int(input("¿Cuántos boletos?: "))
+# cotizador.comprarViaje(origen, destino, num_pasajeros, tipo_camion)
+# 
+#     def elegirRuta(self, origen, destino):
+#         if origen in self.rutas and destino in self.rutas[origen]:
+#             self.precio_ruta = self.rutas[origen][destino]
+#         else:
+#             print("Ruta no válida") 
+# 
+#     def elegirTipoCamion(self, tipocamion):
+#         if tipocamion in ["platino", "turista", "base"]:
+#             self.multiplicador = self.tipocamion[tipocamion]
+#         else:
+#             print("Elige un tipo de camión válido")
+# 
+#     def elegirN_pasajeros(self, n_pasajeros):
+#         if isinstance(n_pasajeros, int) and n_pasajeros >= 1:
+#             self.n_pasajeros = n_pasajeros
+#         else:
+#             print("El número de pasajeros debe ser un entero mayor o igual a 1")
+# 
+#     def comprarViaje(self, origen, destino, n_pasajeros, tipocamion):
+#         self.elegirRuta(origen, destino)
+#         self.elegirTipoCamion(tipocamion)
+#         self.elegirN_pasajeros(n_pasajeros)
+#         costo = self.n_pasajeros * self.multiplicador * self.precio_ruta * self.iva
+#         print("El precio total es de: " + str(costo))
+#         return costo
+# =============================================================================
+
+
+
+# Creas una instancia de la clase CotizadorViajes
+
+
+# Definir los datos de entrada desde el usuario
+
+# Llamar al método comprarViaje con los datos definidos
+
+# =============================================================================
+# 
+# class CotizadorViajes:
+#     rutas=""
+#     tipocamion=""
+#     n_pasajeros=0
+#     multiplicador=1
+#     precio_ruta=0
+#     iva=1.16
+#     def __init__(self,r,t,n,m,p,i):
+#         self.rutas = r
+#         self.tipocamion = t
+#         self.n_pasajeros = n 
+#         self.multiplcador = m
+#         self.precio_ruta = p
+#         self.iva = i
+#     def set_pasajeros(self):
+#         print("mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783}
+#               "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583}
+#               "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323}
+#               "aca": {"mex": 783, "cva": 583, "igu": 323, "aca":0})
+#         
+# 
+#     self.rutas = {"mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783}
+#                   "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583}
+#                   "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323}
+#                   "aca": {"mex": 783, "cva": 583, "igu": 323, "aca":0}
+#                   }
+#     self.tipocamion = {"platino": 2, "turista": 1.5, "base": 1}
+#     self.n_pasajeros = 1
+#     self.multiplicador = 1
+#     self.precio_ruta = 0
+#     self.iva = iva
+# 
+#   def set_pasajeros(self, pasajeros: int):
+#     if pasajeros >= 1:
+#       if isinstance(pasajeros, int):
+#         self.n_pasajeros = pasajeros
+#       else:
+#         print("el numero pasajeros tiene que ser entero")
+#     else:
+#       print("no puede haber un numero negativo de pasajeros")
+# 
+#   def set_tipo_viaje(self, viaje):
+#     if viaje in ["platino", "turista", "base"]:
+#       self.multiplcador = self.ponderaciones[viaje]
+#     else:
+#       print("elige un viaje valido")
+# 
+#   def set_ruta(self, entrada, salida):
+#     self.precio_ruta = self.rutas[entrada][salida]
+# 
+#   def comprar_viaje(self, entrada, salida, pasajeros, viaje):
+#     self.set_ruta(entrada, salida)
+#     self.set_tipo_viaje(viaje)
+#     self.set_pasajeros(pasajeros)
+#     costo = self.n_pasajeros * self.multiplcador * self.precio_ruta * ( 1 +self.iva)
+#     return costo
+# 
+# =============================================================================
+
+# =============================================================================
+# class CotizadorViajes:
+#     rutas = {
+#         "mex": {"mex": 0, "cva": 300, "igu": 400, "aca": 783},
+#         "cva": {"mex": 300, "cva": 0, "igu": 200, "aca": 583},
+#         "igu": {"mex": 400, "cva": 200, "igu": 0, "aca": 323},
+#         "aca": {"mex": 783, "cva": 583, "igu": 323, "aca": 0}
+#     }
+# 
+#     tipocamion = {"platino": 2, "turista": 1.5, "base": 1}
+#     n_pasajeros = 1
+#     multiplicador = 1
+#     precio_ruta = 0
+#     iva = 1.16
+# 
+#     def elegirRuta(self, origen, destino):
+#         if origen in self.rutas and destino in self.rutas[origen]:
+#             self.precio_ruta = self.rutas[origen][destino]
+#         else:
+#             print("Ruta no válida") 
+# 
+#     def elegirTipoCamion(self, tipocamion):
+#         if tipocamion in ["platino", "turista", "base"]:
+#             self.multiplicador = self.tipocamion[tipocamion]
+#         else:
+#             print("Elige un tipo de camión válido")
+# 
+#     def elegirN_pasajeros(self, n_pasajeros):
+#         if isinstance(n_pasajeros, int) and n_pasajeros >= 1:
+#             self.n_pasajeros = n_pasajeros
+#         else:
+#             print("El número de pasajeros debe ser un entero mayor o igual a 1")
+# 
+#     def comprarViaje(self, origen, destino, n_pasajeros, tipocamion):
+#         self.elegirRuta(origen, destino)
+#         self.elegirTipoCamion(tipocamion)
+#         self.elegirN_pasajeros(n_pasajeros)
+#         costo = self.n_pasajeros * self.multiplicador * self.precio_ruta * self.iva
+#         print("El precio total es de: " + str(costo))
+#         return costo
+# 
+# =============================================================================
